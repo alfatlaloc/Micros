@@ -60,6 +60,7 @@
 /********************************************************************************/
 /*DECLARACIÓN DE LA ISR DEL TIMER 1 USANDO __attribute__						*/
 /********************************************************************************/
+void __attribute__((__interrupt__)) _T1Interrupt( void );
 /********************************************************************************/
 /* CONSTANTES ALMACENADAS EN EL ESPACIO DE LA MEMORIA DE PROGRAMA				*/
 /********************************************************************************/
@@ -102,7 +103,31 @@ int main (void)
     
     BFLCD();
     datoLCD('A');
+    /*
+    BFLCD();
+    datoLCD(' ');
     
+    BFLCD();
+    datoLCD('K');
+    
+    BFLCD();
+    datoLCD('A');
+    
+    BFLCD();
+    datoLCD('R');
+    
+    BFLCD();
+    datoLCD('O');
+    
+    BFLCD();
+    datoLCD('L');
+    
+    BFLCD();
+    datoLCD('<');
+    
+    BFLCD();
+    datoLCD('3');
+    */
     for(;EVER;)
     {
         Nop();
@@ -134,6 +159,12 @@ void iniPerifericos( void )
     Nop();
     ADPCFG=0xFFFF;
     Nop();
+    PORTD=0;
+    Nop();
+    LATD=0;
+    Nop();
+    TRISD=0;
+    Nop();    
 }
 
 /********************************************************************************/
@@ -142,3 +173,18 @@ void iniPerifericos( void )
 /* SE USA PUSH.S PARA GUARDAR LOS REGISTROS W0, W1, W2, W3, C, Z, N Y DC EN LOS */
 /* REGISTROS SOMBRA																*/
 /********************************************************************************/
+void __attribute__((__interrupt__)) _T1Interrupt( void )
+{
+    
+        //codigo a ejecutar
+    
+        IFS0bits.T1IF = 0;    //SE LIMPIA LA BANDERA DE INTERRUPCION DEL TIMER 1                      
+}
+
+void __attribute__((__interrupt__)) _INT0Interrupt( void )
+{
+    
+        //codigo a ejecutar
+    
+        IFS0bits.INT0IF = 0;    //SE LIMPIA LA BANDERA DE INTERRUPCION DEL TIMER 1                      
+}

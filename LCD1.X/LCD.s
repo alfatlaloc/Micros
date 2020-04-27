@@ -21,11 +21,9 @@ _datoLCD:
     NOP
     BSET    PORTD,  #E_LCD  ;Enable en 1 
     NOP
-    
     MOV.B   WREG,   PORTB   ;Note W0=WREG
     NOP
     BCLR    PORTD,  #E_LCD    
-    
     RETURN
     
 _comandoLCD:
@@ -43,39 +41,73 @@ _comandoLCD:
     
    ;--------P.D: no se si es puerto d o puerto b 
  _BFLCD:
-    MOV	    #0X00FF, W1	    ;W1= 0X00FF
-    MOV	    TRISB, W2
-    IOR	    W1, W2, W2; TRISB= TRISB OR W1 --> Configurar puerto b como entrada
-    MOV	    W2, TRISB
+    PUSH    W0
+    CLR	    TRISD
     NOP
-    BCLR    PORTD,  #RS_LCD
+    CLR	    TRISB
     NOP
-    BSET    PORTD,  #RW_LCD ;Read-write en 1 para leer de la LCD
+    BCLR    PORTD,#RS_LCD ; RS=0
+    NOP
+    SETM.B  TRISB
+    NOP
+    BSET    PORTD,#RW_LCD
+    NOP
+    BSET    PORTD,#E_LCD
     NOP
     CICLO:
     BTSC    PORTB,  #RB7
-    NOP
     GOTO    CICLO
-    NOP
     BCLR    PORTD,  #E_LCD  ;Enable en 0
     NOP
     BCLR    PORTD,  #RW_LCD 
     NOP
-    MOV	    #0XFF00, W1
-    MOV	    TRISB, W2
-    AND	    W2, W1, W1 ; TRISB= TRISB AND W1 --> Configurar puerto b como salida
-    MOV	    W2, TRISB
+    SETM    TRISB
+    NOP
+    CLR.B   TRISB
+    POP	    W0
     RETURN
     
     
  _iniLCD8bits:
-    CALL    _RETARDO15ms
-    MOV	    #0X30,	W0
+    CALL    _RETARDO_15ms
+    MOV	    #0X30,  W0
     CALL    _comandoLCD
     
-    RETURN
+    CALL    _RETARDO_15ms
+    MOV	    #0X30,  W0
+    CALL    _comandoLCD
     
-_RETARDO15ms:
+    CALL    _RETARDO_15ms
+    MOV	    #0X30,  W0
+    CALL    _comandoLCD
+    
+    CALL    _BFLCD
+    MOV	    #0X38,  W0
+    CALL    _comandoLCD
+    
+    CALL    _BFLCD
+    MOV	    #0X38,  W0
+    CALL    _comandoLCD
+    
+    CALL    _BFLCD
+    MOV	    #0X08,  W0
+    CALL    _comandoLCD
+    
+    CALL    _BFLCD
+    MOV	    #0X01,  W0
+    CALL    _comandoLCD
+    
+    CALL    _BFLCD
+    MOV	    #0X06,  W0
+    CALL    _comandoLCD
+    
+    CALL    _BFLCD
+    MOV	    #0X0F,  W0
+    CALL    _comandoLCD
+    
+    RETURN 
+  
+_RETARDO_15ms:
 	PUSH	W0  ; PUSH.D W0
 	PUSH	W1
 CICLO1_1S:	
@@ -86,6 +118,5 @@ CICLO1_1S:
 	POP	W0
 	RETURN
 	
-
 
 
