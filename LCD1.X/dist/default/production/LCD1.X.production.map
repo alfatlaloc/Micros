@@ -86,20 +86,20 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x100                0xf6           0x171  (369)
-.text                        0x1f6               0x110           0x198  (408)
-.dinit                       0x306                0x14            0x1e  (30)
-.prog                        0x31a                 0x2             0x3  (3)
+.text                        0x1f6               0x10c           0x192  (402)
+.dinit                       0x302                0x14            0x1e  (30)
+.prog                        0x316                 0x2             0x3  (3)
 
-                 Total "program" memory used (bytes):          0x32a  (810) 1%
+                 Total "program" memory used (bytes):          0x324  (804) 1%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x800]
 
 section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
-_0x7feff7a988205ea743cb      0x800                   0            0x80  (128)
+_0x7f48297588205ea85e2f      0x800                   0            0x80  (128)
 .nbss                        0x880                   0             0x2  (2)
-_0x7feff7a988c05ea743cb      0xf80                   0            0x80  (128)
+_0x7f48297588c05ea85e2f      0xf80                   0            0x80  (128)
 
                  Total "data" memory used (bytes):          0x102  (258) 12%
 
@@ -140,11 +140,11 @@ External Symbols in Program Memory (by address):
                   0x0001f6                  _datoLCD
                   0x00020a                  _comandoLCD
                   0x00021e                  _BFLCD
-                  0x000250                  _iniLCD8bits
-                  0x0002ba                  _main
-                  0x0002dc                  _iniInterrupciones
-                  0x0002e2                  _iniPerifericos
-                  0x00031a                  _ps_coeff
+                  0x00024c                  _iniLCD8bits
+                  0x0002b6                  _main
+                  0x0002d8                  _iniInterrupciones
+                  0x0002de                  _iniPerifericos
+                  0x000316                  _ps_coeff
                   0xf8000a                  __FGS.sec
 
 External Symbols in Program Memory (by name):
@@ -160,11 +160,11 @@ External Symbols in Program Memory (by name):
                   0x000100                  __resetPRI
                   0x00020a                  _comandoLCD
                   0x0001f6                  _datoLCD
-                  0x0002dc                  _iniInterrupciones
-                  0x000250                  _iniLCD8bits
-                  0x0002e2                  _iniPerifericos
-                  0x0002ba                  _main
-                  0x00031a                  _ps_coeff
+                  0x0002d8                  _iniInterrupciones
+                  0x00024c                  _iniLCD8bits
+                  0x0002de                  _iniPerifericos
+                  0x0002b6                  _main
+                  0x000316                  _ps_coeff
 
 Memory Configuration
 
@@ -280,7 +280,7 @@ __RESERVED2
 
 __FGS             0xf8000a          0x2
  *(__FGS.sec*)
- __FGS.sec        0xf8000a          0x2 /CW/_FGShK¢
+ __FGS.sec        0xf8000a          0x2 /CW/_FGSh;;
                   0xf8000a                  __FGS.sec
 
 __FICD
@@ -306,10 +306,10 @@ userdata
  .debug_abbrev    0x000000         0x14 build/default/production/LCD.o
  .debug_abbrev    0x000014         0xd5 build/default/production/principal.o
 
-.debug_line       0x000000        0x141
+.debug_line       0x000000        0x13d
  *(.debug_line)
- .debug_line      0x000000         0x80 build/default/production/LCD.o
- .debug_line      0x000080         0xc1 build/default/production/principal.o
+ .debug_line      0x000000         0x7e build/default/production/LCD.o
+ .debug_line      0x00007e         0xbf build/default/production/principal.o
 
 .debug_frame      0x000000         0x9a
  *(.debug_frame)
@@ -1039,7 +1039,7 @@ LOAD /opt/microchip/xc16/v1.50/bin/bin/../../lib/libm-elf.a
 LOAD /opt/microchip/xc16/v1.50/bin/bin/../../lib/liblega-c-elf.a
 END GROUP
 OUTPUT(dist/default/production/LCD1.X.production.elf elf32-pic30)
-LOAD /CW/_FGShK¢
+LOAD /CW/_FGSh;;
 LOAD default_isr
 LOAD data_init
 
@@ -1057,15 +1057,15 @@ __c30_signature
  __c30_signature
                   0x000078          0x6 /opt/microchip/xc16/v1.50/bin/bin/../../lib/liblega-pic30-elf.a(data_init_standard.o)
 
-_0x7feff7a988205ea743cb
+_0x7f48297588205ea85e2f
                     0x0800         0x80
- _0x7feff7a988205ea743cb
+ _0x7f48297588205ea85e2f
                     0x0800         0x80 build/default/production/principal.o
                     0x0800                  _x_input
 
-_0x7feff7a988c05ea743cb
+_0x7f48297588c05ea85e2f
                     0x0f80         0x80
- _0x7feff7a988c05ea743cb
+ _0x7f48297588c05ea85e2f
                     0x0f80         0x80 build/default/production/principal.o
                     0x0f80                  _y_input
 
@@ -1094,20 +1094,20 @@ _0x7feff7a988c05ea743cb
  .ivt._INT0Interrupt
                   0x000014          0x2 build/default/production/principal.o
 
-.text             0x0001f6        0x110
- .text            0x0001f6         0xc4 build/default/production/LCD.o
+.text             0x0001f6        0x10c
+ .text            0x0001f6         0xc0 build/default/production/LCD.o
                   0x0001f6                  _datoLCD
                   0x00020a                  _comandoLCD
                   0x00021e                  _BFLCD
-                  0x000250                  _iniLCD8bits
- .text            0x0002ba         0x4c build/default/production/principal.o
-                  0x0002ba                  _main
-                  0x0002dc                  _iniInterrupciones
-                  0x0002e2                  _iniPerifericos
+                  0x00024c                  _iniLCD8bits
+ .text            0x0002b6         0x4c build/default/production/principal.o
+                  0x0002b6                  _main
+                  0x0002d8                  _iniInterrupciones
+                  0x0002de                  _iniPerifericos
 
-.dinit            0x000306         0x14
- .dinit           0x000306         0x14 data_init
+.dinit            0x000302         0x14
+ .dinit           0x000302         0x14 data_init
 
-.prog             0x00031a          0x2
- .prog            0x00031a          0x2 build/default/production/principal.o
-                  0x00031a                  _ps_coeff
+.prog             0x000316          0x2
+ .prog            0x000316          0x2 build/default/production/principal.o
+                  0x000316                  _ps_coeff

@@ -103,31 +103,7 @@ int main (void)
     
     BFLCD();
     datoLCD('A');
-    /*
-    BFLCD();
-    datoLCD(' ');
-    
-    BFLCD();
-    datoLCD('K');
-    
-    BFLCD();
-    datoLCD('A');
-    
-    BFLCD();
-    datoLCD('R');
-    
-    BFLCD();
-    datoLCD('O');
-    
-    BFLCD();
-    datoLCD('L');
-    
-    BFLCD();
-    datoLCD('<');
-    
-    BFLCD();
-    datoLCD('3');
-    */
+
     for(;EVER;)
     {
         Nop();

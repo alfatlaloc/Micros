@@ -41,7 +41,6 @@ _comandoLCD:
     
    ;--------P.D: no se si es puerto d o puerto b 
  _BFLCD:
-    PUSH    W0
     CLR	    TRISD
     NOP
     CLR	    TRISB
@@ -64,7 +63,6 @@ _comandoLCD:
     SETM    TRISB
     NOP
     CLR.B   TRISB
-    POP	    W0
     RETURN
     
     
