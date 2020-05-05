@@ -136,12 +136,12 @@ __reset:
 	CLR	W2
 	MOV	#tblpage(boleta),   W0
 	MOV	W0,		    TBLPAG
-	MOV	#tbloffset(boleta), W1
+	MOV	#tbloffset(boleta), W1 ;Guarda el table offset a W1
 	
 CICLO:	
-	MOV	PORTD,	W2
-	AND	#0x0001,    W2	;Hace la mascara para solo saber si RD8 esta en 1
-	CP0	W2		;Si es 0 se va a LEER DIGITO, Si es 1 se va LEER_Inverso
+	MOV	PORTD,	W0
+	AND	#0x0001,    W0	;Hace la mascara para solo saber si RD8 esta en 1
+	CP0	W0		;Si es 0 se va a LEER DIGITO, Si es 1 se va LEER_Inverso
 	BRA	Z,LEER_DIGITO
 	
 LEER_INVERSO:
@@ -171,6 +171,7 @@ R_I:
 	TBLRDL.B    [W1],	    W0
 	MOV.B	WREG,		    PORTB
 	NOP
+	CALL _DELAY
 	ADD #9,W1
     GOTO LEER_INVERSO
 
@@ -214,11 +215,11 @@ CICLO1_1S:
 ; * RF0 - ENTRADA, PUSH BUTTON 
 ; */
 INI_PERIFERICOS:
-	CLR	PORTD
+	SETM	PORTD
 	NOP
-	CLR	LATD
+	SETM	LATD
 	NOP
-	CLR	TRISD
+	SETM	TRISD
 	NOP
 	
 	CLR	PORTB

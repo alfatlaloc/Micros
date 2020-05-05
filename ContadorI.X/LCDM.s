@@ -1,9 +1,29 @@
 .include "p30F4013.inc"  ;añadir archivo de cabecera
+
+;Funciones LCD
 .GLOBAL _datoLCD
 .GLOBAL _comandoLCD
 .GLOBAL _BFLCD
 .GLOBAL _iniLCD8bits
+.GLOBAL _RETARDO_15ms
+.GLOBAL _imprimeLCD
     
+;Interrupciones
+.GLOBAL _iniInterrupciones
+
+    
+; VARIABLES DE CONTEO DE INTERRUPCIONES.
+.GLOBAL _units
+.GLOBAL _tens
+.GLOBAL _hundreds
+.GLOBAL _thousands
+
+; VARIABLES DE CONTEO DE INTERRUPCIONES.
+.GLOBAL _units
+.GLOBAL _tens
+.GLOBAL _hundreds
+.GLOBAL _thousands
+
 .EQU	RS_LCD,	    RD0	    ;EQUIVALENCIA
 .EQU	RW_LCD,	    RD1	    ;EQUIVALENCIA
 .EQU	E_LCD,	    RD2	    ;EQUIVALENCIA
@@ -25,7 +45,23 @@ _datoLCD:
     NOP
     BCLR    PORTD,  #E_LCD    
     RETURN
+
+; Imprime en el LCD una cadena de caracteres.
+_imprimeLCD:
+    PUSH W1
+    MOV W0, W1
+    COUNT:
+	MOV.B [W1++], W0
+	CP0.B W0
+	BRA Z, END_imprimeLCD
+	CALL _BFLCD
+	CALL _datoLCD
+	GOTO COUNT
+    END_imprimeLCD:
+	POP W1
+    RETURN
     
+ 
 _comandoLCD:
     BCLR    PORTD,  #RS_LCD 
     NOP
@@ -33,7 +69,6 @@ _comandoLCD:
     NOP
     BSET    PORTD,  #E_LCD  ;Enable en 1 
     NOP
-    
     MOV.B   WREG,   PORTB   ;Note W0=WREG
     NOP
     BCLR    PORTD,  #E_LCD 
@@ -116,5 +151,44 @@ CICLO1_1S:
 	POP	W0
 	RETURN
 	
+_iniInterrupciones:
+    BCLR IFS1, #INT1IF
+    BCLR INTCON2, #INT1EP
+    BSET IEC1, #INT1IE
+    RETURN
 
-
+; ISR externa por INT1
+__INT1Interrupt:
+    ; Guardamos W0 en la pila.
+    PUSH	W0
+    ; Guardamos 10 en W0 para las comparaciones.
+    MOV		#10,    W0
+    ; Incrementamos y verificamos variables de conteo.
+    INC.B	_units
+    CP.B	_units
+    BRA		NZ, END__INT1Interrupt
+    CLR.B	_units
+    
+    INC.B	_tens
+    CP.B	_tens
+    BRA		NZ, END__INT1Interrupt
+    CLR.B	_tens
+    
+    INC.B	_hundreds
+    CP.B	_hundreds
+    BRA		NZ, END__INT1Interrupt
+    CLR.B	_hundreds
+    
+    INC.B	_thousands
+    CP.B	_thousands
+    BRA		NZ, END__INT1Interrupt
+    CLR.B	_thousands
+    
+    END__INT1Interrupt:
+	; Apagamos la bandera de activación de la interrupción.
+	BCLR    IFS1,   #INT1IF
+	; Restauramos el valor de W0
+	POP	    W0
+	; Retornamos de la rutina de interrupción.
+        retfie
+    

@@ -85,11 +85,11 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x100                0x82            0xc3  (195)
-.text                        0x182                0x9e            0xed  (237)
-.myconstbuffer               0x220                0x14            0x1e  (30)
-.dinit                       0x234                0x14            0x1e  (30)
+.text                        0x182                0xa2            0xf3  (243)
+.myconstbuffer               0x224                0x14            0x1e  (30)
+.dinit                       0x238                0x14            0x1e  (30)
 
-                 Total "program" memory used (bytes):          0x1ec  (492) 1%
+                 Total "program" memory used (bytes):          0x1f2  (498) 1%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x800]
@@ -119,14 +119,14 @@ External Symbols in Program Memory (by address):
                   0x000106                  __data_init_standard
                   0x00017c                  __DefaultInterrupt
                   0x000182                  __reset
-                  0x000218                  __T1Interrupt
+                  0x00021c                  __T1Interrupt
                   0xf8000a                  __FGS.sec
 
 External Symbols in Program Memory (by name):
 
                   0x00017c                  __DefaultInterrupt
                   0xf8000a                  __FGS.sec
-                  0x000218                  __T1Interrupt
+                  0x00021c                  __T1Interrupt
                   0x000106                  __data_init
                   0x000106                  __data_init_standard
                   0x000182                  __reset
@@ -240,7 +240,7 @@ __RESERVED2
 
 __FGS             0xf8000a          0x2
  *(__FGS.sec*)
- __FGS.sec        0xf8000a          0x2 /CW/_FGSxf
+ __FGS.sec        0xf8000a          0x2 /CW/_FGSxž
                   0xf8000a                  __FGS.sec
 
 __FICD
@@ -255,18 +255,18 @@ userdata
 .comment
  *(.comment)
 
-.debug_info       0x000000         0x85
+.debug_info       0x000000         0x7d
  *(.debug_info)
- .debug_info      0x000000         0x85 build/default/production/Arreglos.o
+ .debug_info      0x000000         0x7d build/default/production/Arreglos.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev     0x000000         0x14
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0x14 build/default/production/Arreglos.o
 
-.debug_line       0x000000         0x80
+.debug_line       0x000000         0x81
  *(.debug_line)
- .debug_line      0x000000         0x80 build/default/production/Arreglos.o
+ .debug_line      0x000000         0x81 build/default/production/Arreglos.o
 
 .debug_frame
  *(.debug_frame)
@@ -989,7 +989,7 @@ LOAD /opt/microchip/xc16/v1.50/bin/bin/../../lib/libm-elf.a
 LOAD /opt/microchip/xc16/v1.50/bin/bin/../../lib/liblega-c-elf.a
 END GROUP
 OUTPUT(dist/default/production/programa6_TBLPAG.X.production.elf elf32-pic30)
-LOAD /CW/_FGSxf
+LOAD /CW/_FGSxž
 LOAD default_isr
 LOAD data_init
 
@@ -1012,14 +1012,14 @@ __c30_signature
  .ivt._T1Interrupt
                   0x00001a          0x2 build/default/production/Arreglos.o
 
-.text             0x000182         0x9e
- .text            0x000182         0x9e build/default/production/Arreglos.o
+.text             0x000182         0xa2
+ .text            0x000182         0xa2 build/default/production/Arreglos.o
                   0x000182                  __reset
-                  0x000218                  __T1Interrupt
+                  0x00021c                  __T1Interrupt
 
-.myconstbuffer    0x000220         0x14
+.myconstbuffer    0x000224         0x14
  .myconstbuffer
-                  0x000220         0x14 build/default/production/Arreglos.o
+                  0x000224         0x14 build/default/production/Arreglos.o
 
-.dinit            0x000234         0x14
- .dinit           0x000234         0x14 data_init
+.dinit            0x000238         0x14
+ .dinit           0x000238         0x14 data_init
