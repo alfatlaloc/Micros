@@ -90,50 +90,55 @@ void enLPOSC(void);
 
 void printLCD(char * cad);
 
-char USEG;
-char DSEG;
-char UMIN;
-char DMIN;
-char DHR;
-char UHR;
+char useg;
+char dseg;
+char umin;
+char dmin;
+char dhr;
+char uhr;
 
 char RTC[9];
 
 int main (void)
 {     
     
-    iniPerifericos();
-    iniLCD8bits();  //Inicializar la LCD
-
-    USEG=0;
-    DSEG=0;
-    UMIN=9;
-    DMIN=5;
-    DHR=2;
-    UHR=3;
+    useg=0;
+    dseg=5;
+    dmin=5;
+    umin=9;
+    dhr=2;
+    uhr=3;
     
+    iniPerifericos();
     iniTIMER();
     enLPOSC();
+    iniLCD8bits();  //Inicializar la LCD
+
+    BFLCD();
+    comandoLCD(0x85);
+
+    printLCD("RELOJ:");
     
+            IFS0bits.T1IF = 0;    //SE LIMPIA LA BANDERA DE INTERRUPCION DEL TIMER 1   
+        IEC0bits.T1IE=1;
     T1CONbits.TON=1;
     
-    
-    comandoLCD(0x85);
-    
-    RTC[2]=';';
-    RTC[5]=';';
+    RTC[2]=':';
+    RTC[5]=':';
     RTC[8]=0;
     
     for(;EVER;)
     {
         BFLCD();
         comandoLCD(0xC4);
-        RTC[0]=DHR+0x30;
-        RTC[1]=UHR+0x30;
-        RTC[3]=DMIN+0x30;
-        RTC[4]=UMIN+0x30;
-        RTC[6]=DSEG+0x30;
-        RTC[7]=DSEG+0x30;
+        RTC[0]=dhr+0x30;
+        RTC[1]=uhr+0x30;
+        RTC[3]=dmin+0x30;
+        RTC[4]=umin+0x30;
+        RTC[6]=dseg+0x30;
+        RTC[7]=useg+0x30;
+        
+        printLCD(RTC);
         Nop();
     }
   
@@ -189,18 +194,3 @@ void iniPerifericos( void )
 /* SE USA PUSH.S PARA GUARDAR LOS REGISTROS W0, W1, W2, W3, C, Z, N Y DC EN LOS */
 /* REGISTROS SOMBRA																*/
 /********************************************************************************/
-void __attribute__((__interrupt__,no_auto_psv)) _T1Interrupt( void )
-{
-    
-        //codigo a ejecutar
-    
-        IFS0bits.T1IF = 0;    //SE LIMPIA LA BANDERA DE INTERRUPCION DEL TIMER 1                      
-}
-
-void __attribute__((__interrupt__,no_auto_psv)) _INT0Interrupt( void )
-{
-    
-        //codigo a ejecutar
-    
-        IFS0bits.INT0IF = 0;    //SE LIMPIA LA BANDERA DE INTERRUPCION DEL TIMER 1                      
-}
