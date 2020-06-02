@@ -60,7 +60,7 @@
 /********************************************************************************/
 /*DECLARACIÓN DE LA ISR DEL TIMER 1 USANDO __attribute__						*/
 /********************************************************************************/
-void __attribute__((__interrupt__)) _T1Interrupt( void );
+
 /********************************************************************************/
 /* CONSTANTES ALMACENADAS EN EL ESPACIO DE LA MEMORIA DE PROGRAMA				*/
 /********************************************************************************/
@@ -83,46 +83,41 @@ void iniPerifericos( void );
 void iniInterrupciones( void );
 void datoLCD(char);
 void iniLCD8bits(void);
-void imprimeLCD(char*);
 void BFLCD(void);
 void comandoLCD(char);
+void iniUART(void);
+void iniInt(void);
+void printLCD(char * cad);
 
-short units;
-short tens;
-short hundreds;
-short thousands;
+char dato,drcv;
 
 int main (void)
 {     
     
-    units = 0;
-    tens = 0;
-    hundreds = 0;
-    thousands = 0;
-    
     iniPerifericos();
-    iniLCD8bits();  //Inicializar la LCD
-    iniInterrupciones();
     
-    imprimeLCD("CONTEO:  ");
+    iniUART();
+    iniLCD8bits();  //Inicializar la LCD
 
+    dato=0;
+    drcv=0;
+    
+    iniInt();
+    
     for(;EVER;)
     {
-        BFLCD();
-        comandoLCD(0x87);
-        BFLCD();
-        datoLCD(thousands + 0x30);
-        BFLCD();
-        datoLCD(hundreds + 0x30);
-        BFLCD();
-        datoLCD(tens + 0x30);
-        BFLCD();
-        datoLCD(units + 0x30);
+        if ( drcv == 1 )
+        {    
+            BFLCD();
+            datoLCD( dato );
+            drcv=0;
+        }
         Nop();
     }
   
     return 0;
 }
+
 /****************************************************************************/
 /* DESCRIPCION:	ESTA RUTINA INICIALIZA LAS INTERRPCIONES    				*/
 /* PARAMETROS: NINGUNO                                                      */
@@ -136,7 +131,7 @@ int main (void)
 /****************************************************************************/
 void iniPerifericos( void )
 {
-    /*Configurar el puerto B como salida */
+    /*Configuracion de puertos*/
     PORTB=0;
     Nop();
     LATB=0;
@@ -150,13 +145,14 @@ void iniPerifericos( void )
     LATD=0;
     Nop();
     TRISD=0;
-    Nop();    
-    TRISDbits.TRISD8=1;//Sensor
     Nop();
-    PORTDbits.RD8=1;
-    Nop();
-    LATDbits.LATD8=1;
-    Nop();
+    
+    //UART
+    TRISC=0;
+    PORTC=0;
+    LATC=0;
+    TRISCbits.TRISC14=1;
+    
 }
 
 /********************************************************************************/
@@ -165,10 +161,18 @@ void iniPerifericos( void )
 /* SE USA PUSH.S PARA GUARDAR LOS REGISTROS W0, W1, W2, W3, C, Z, N Y DC EN LOS */
 /* REGISTROS SOMBRA																*/
 /********************************************************************************/
-void __attribute__((__interrupt__,no_auto_psv)) _T1Interrupt( void )
-{
-        BCLR IFS0,#U1RXIF
-    BSET IEC0,#U1RXIE
-    BSET U1MODE,#UARTEN                  
+
+
+//Para el Uart
+void iniUART(void){
+    U1MODE = 0X420;
+    U1STA = 0X8000;
+    U1BRG = 11;
 }
 
+void iniInt(void){
+    IFS0bits.U1RXIF=0;
+    IEC0bits.U1RXIE=1;       
+    U1MODEbits.UARTEN=1; 
+}
+        

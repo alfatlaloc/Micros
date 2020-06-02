@@ -6,7 +6,7 @@
 .GLOBAL _BFLCD
 .GLOBAL _iniLCD8bits
 .GLOBAL _RETARDO_15ms
-.GLOBAL _imprimeLCD
+.GLOBAL _printLCD
 
 .EQU	RS_LCD,	    RD0	    ;EQUIVALENCIA
 .EQU	RW_LCD,	    RD1	    ;EQUIVALENCIA
@@ -31,7 +31,7 @@ _datoLCD:
     RETURN
 
 ; Imprime en el LCD una cadena de caracteres.
-_imprimeLCD:
+_printLCD:
     PUSH W1
     MOV W0, W1
     COUNT:
@@ -135,8 +135,3 @@ CICLO1_1S:
 	POP	W0
 	RETURN
 	
-_iniInterrupciones:
-    BCLR IFS1, #INT1IF
-    BCLR INTCON2, #INT1EP
-    BSET IEC1, #INT1IE
-    RETURN
