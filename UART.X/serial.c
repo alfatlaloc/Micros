@@ -6,6 +6,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 
 #define N  1024
 #define EVER 1
@@ -31,16 +32,16 @@ int main()
 		//write( fd_serie, &dato, 1 );
 		//sleep(1);
 	}*/
+	char * datalcd = "MICROCHIP";
+	int count=0;
 	for(;EVER;){
-		dato = 'h';
-		write( fd_serie,&dato,1);
-		dato = 'o';
-                write( fd_serie,&dato,1);
-		dato = 'l';
-                write( fd_serie,&dato,1);
-		dato = 'a';
-                write( fd_serie,&dato,1);
+		if ( count == strlen(datalcd) )
+			count=0;
+
+                write( fd_serie,&datalcd[count],1);
+		count++;
 		sleep(1);
+
 	}
 	close( fd_serie );
 

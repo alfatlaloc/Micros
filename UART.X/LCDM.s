@@ -7,7 +7,9 @@
 .GLOBAL _iniLCD8bits
 .GLOBAL _RETARDO_15ms
 .GLOBAL _printLCD
+.GLOBAL _iniLCD8bits
 
+    
 .EQU	RS_LCD,	    RD0	    ;EQUIVALENCIA
 .EQU	RW_LCD,	    RD1	    ;EQUIVALENCIA
 .EQU	E_LCD,	    RD2	    ;EQUIVALENCIA
@@ -135,3 +137,6 @@ CICLO1_1S:
 	POP	W0
 	RETURN
 	
+	
+
+    

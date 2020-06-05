@@ -86,10 +86,10 @@ void iniLCD8bits(void);
 void BFLCD(void);
 void comandoLCD(char);
 void iniUART(void);
-void iniInt(void);
 void printLCD(char * cad);
 
-char dato,drcv;
+char dato;
+char drcv;
 
 int main (void)
 {     
@@ -98,14 +98,14 @@ int main (void)
     
     iniUART();
     iniLCD8bits();  //Inicializar la LCD
-
+    iniInterrupciones();
+    
     dato=0;
     drcv=0;
-    
-    iniInt();
-    
+        
     for(;EVER;)
     {
+
         if ( drcv == 1 )
         {    
             BFLCD();
@@ -152,7 +152,7 @@ void iniPerifericos( void )
     PORTC=0;
     LATC=0;
     TRISCbits.TRISC14=1;
-    
+    TRISCbits.TRISC13=1;
 }
 
 /********************************************************************************/
@@ -162,17 +162,9 @@ void iniPerifericos( void )
 /* REGISTROS SOMBRA																*/
 /********************************************************************************/
 
-
 //Para el Uart
 void iniUART(void){
     U1MODE = 0X420;
     U1STA = 0X8000;
     U1BRG = 11;
 }
-
-void iniInt(void){
-    IFS0bits.U1RXIF=0;
-    IEC0bits.U1RXIE=1;       
-    U1MODEbits.UARTEN=1; 
-}
-        
