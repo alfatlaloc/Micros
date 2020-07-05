@@ -60,7 +60,7 @@
 /********************************************************************************/
 /*DECLARACIÓN DE LA ISR DEL TIMER 1 USANDO __attribute__						*/
 /********************************************************************************/
-
+/*void __attribute__((__interrupt__,no_auto_psv)) _T1Interrupt(void);*/
 /********************************************************************************/
 /* CONSTANTES ALMACENADAS EN EL ESPACIO DE LA MEMORIA DE PROGRAMA				*/
 /********************************************************************************/
@@ -80,39 +80,25 @@ int y_input[MUESTRAS] __attribute__ ((space(ymemory)));
 int var1 __attribute__ ((near));
 
 void iniPerifericos( void );
-void iniInterrupciones( void );
-void datoLCD(char);
-void iniLCD8bits(void);
-void BFLCD(void);
-void comandoLCD(char);
-void iniUART(void);
-void printLCD(char * cad);
-
-char dato;
-char drcv;
+void confUART(void);
+void iniTimers(void);
+void iniADC(void);
+void iniInterrupciones(void);
+void confPerifericos(void);
 
 int main (void)
 {     
     
     iniPerifericos();
-    
-    iniUART();
-    iniLCD8bits();  //Inicializar la LCD
+    confUART();
+    iniTimers();
+    iniADC();
     iniInterrupciones();
-    
-    dato=0;
-    drcv=0;
-        
+    confPerifericos();
+
     for(;EVER;)
     {
-
-        if ( drcv == 1 )
-        {    
-            BFLCD();
-            datoLCD( dato );
-            drcv=0;
-        }
-        Nop();
+        asm("PWRSAV #1");
     }
   
     return 0;
@@ -138,6 +124,10 @@ void iniPerifericos( void )
     Nop();
     TRISB=0;
     Nop();
+    
+    TRISBbits.TRISB2=1;
+    Nop();
+    
     PORTD=0;
     Nop();
     LATD=0;
@@ -147,10 +137,13 @@ void iniPerifericos( void )
     
     //UART
     TRISC=0;
+    Nop();
     PORTC=0;
+    Nop();
     LATC=0;
+    Nop();
     TRISCbits.TRISC14=1;
-    TRISCbits.TRISC13=1;
+    Nop();
 }
 
 /********************************************************************************/
@@ -161,8 +154,38 @@ void iniPerifericos( void )
 /********************************************************************************/
 
 //Para el Uart
-void iniUART(void){
+void confUART(void){
     U1MODE = 0X420;
     U1STA = 0X8000;
-    U1BRG = 11;
+    U1BRG = 5;
+}
+
+void iniTimers(void){
+    TMR3 = 0x0000;
+    PR3 = 225;
+    T3CON = 0x0000;
+}
+
+void iniADC(void){
+    ADCON1 = 0x0044;
+    ADCON2 = 0x003C;
+    ADCON3 = 0x0F02;
+    ADCHS = 0x0002;
+    ADPCFG = 0xFFFB;
+    ADCSSL = 0x0000;
+}
+
+void confPerifericos(void){
+    U1MODEbits.UARTEN = 1;
+    U1STAbits.UTXEN = 1;
+    ADCON1bits.ADON = 1;
+    T3CONbits.TON = 1;
+}
+
+
+void iniInterrupciones(void){
+    IFS0bits.ADIF=0;
+    IFS0bits.T3IF=0;
+    IEC0bits.ADIE=1;
+    IEC0bits.T3IE=1;
 }
